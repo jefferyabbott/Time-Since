@@ -1,6 +1,6 @@
 name: time_since
 description: convert DateTime and Unix timestamps into human-readable 'time-ago' strings
-version: 1.0.0
+version: 1.0.1
 repository: https://github.com/jefferyabbott/Time-Since
 
 topics:

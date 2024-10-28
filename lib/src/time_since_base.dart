@@ -20,8 +20,10 @@ const List<TimeDivision> timeDivisions = [
 class TimeFormatOptions {
   /// Whether to append "ago" to the result
   final bool addAgo;
+
   /// Maximum number of units to show
   final int maxPrecision;
+
   /// Number of seconds within which to display "just now"
   final int justNowThreshold;
 
@@ -36,17 +38,19 @@ class TimeFormatOptions {
 /// [time] can be either a Unix timestamp (int) or a DateTime object
 String timeSince(dynamic time, [TimeFormatOptions? options]) {
   final opts = options ?? const TimeFormatOptions();
-  
+
   // Convert input to milliseconds since epoch
   final milliseconds = _normalizeTime(time);
   if (milliseconds == null) {
-    throw ArgumentError('Invalid time input. Expected Unix timestamp (int) or DateTime object');
+    throw ArgumentError(
+        'Invalid time input. Expected Unix timestamp (int) or DateTime object');
   }
-  
+
   // Calculate seconds difference
-  final seconds = (DateTime.now().millisecondsSinceEpoch - milliseconds) ~/ 1000;
+  final seconds =
+      (DateTime.now().millisecondsSinceEpoch - milliseconds) ~/ 1000;
   final positiveSeconds = seconds.abs();
-  
+
   // Handle very recent times
   if (positiveSeconds <= opts.justNowThreshold) {
     return 'just now';
@@ -55,10 +59,10 @@ String timeSince(dynamic time, [TimeFormatOptions? options]) {
   // Find all applicable time divisions
   final parts = <Map<String, dynamic>>[];
   var remainingSeconds = positiveSeconds;
-  
+
   for (final division in timeDivisions) {
     if (parts.length >= opts.maxPrecision) break;
-    
+
     final value = remainingSeconds ~/ division.amount;
     if (value >= 1) {
       parts.add({
@@ -70,9 +74,8 @@ String timeSince(dynamic time, [TimeFormatOptions? options]) {
   }
 
   // Format the string
-  final timeString = parts
-      .map((part) => '${part['value']} ${part['unit']}')
-      .join(', ');
+  final timeString =
+      parts.map((part) => '${part['value']} ${part['unit']}').join(', ');
 
   return opts.addAgo ? '$timeString ago' : timeString;
 }
