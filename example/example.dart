@@ -18,12 +18,12 @@ void main() {
   void customFormattingExample() {
     final now = DateTime.now();
     final pastTime = now.subtract(const Duration(days: 45));
-    
+
     final options = TimeFormatOptions(
-      addAgo: false,      // Don't append "ago"
-      maxPrecision: 2,    // Show two units
+      addAgo: false, // Don't append "ago"
+      maxPrecision: 2, // Show two units
     );
-    
+
     print(timeSince(pastTime, options)); // "1 month, 15 days"
   }
 
@@ -34,7 +34,7 @@ void main() {
     final almostNow = now.subtract(const Duration(seconds: 45));
 
     // Default threshold is 30 seconds
-    print(timeSince(justNow));  // "just now"
+    print(timeSince(justNow)); // "just now"
     print(timeSince(almostNow)); // "45 seconds ago"
 
     // Custom threshold
@@ -69,8 +69,6 @@ void main() {
       // Prints: Error: Invalid time input. Expected Unix timestamp (int) or DateTime object
     }
   }
-
- 
 
   // Running the examples
   basicDateTimeExample();
