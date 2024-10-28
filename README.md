@@ -1,39 +1,122 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# time_since
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/tools/pub/writing-package-pages). 
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/to/develop-packages). 
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+A Flutter package that converts timestamps into human-readable time-ago strings (e.g., "2 hours ago", "3 months ago").
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+- Convert timestamps or DateTime objects into human-readable time strings
+- Customizable output format
+- Support for multiple time units (years, months, days, hours, minutes, seconds)
+- "Just now" threshold for very recent times
+- Configurable precision for time descriptions
+- Automatic pluralization of time units
 
-## Getting started
+## Installation
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+Add this to your package's `pubspec.yaml` file:
+
+```yaml
+dependencies:
+  time_since: ^1.0.0
+```
+
+Then run:
+
+```bash
+flutter pub get
+```
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
+### Basic Usage
 
 ```dart
-const like = 'sample';
+import 'package:time_since/time_since.dart';
+
+// Using with DateTime
+final dateTime = DateTime(2024, 1, 1);
+print(timeSince(dateTime)); // "3 months ago"
+
+// Using with Unix timestamp (seconds)
+final timestamp = 1704067200; // January 1, 2024
+print(timeSince(timestamp)); // "3 months ago"
 ```
 
-## Additional information
+### Customizing Output
 
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+You can customize the output format using `TimeFormatOptions`:
+
+```dart
+final options = TimeFormatOptions(
+  addAgo: false,         // Don't append "ago" to the result
+  maxPrecision: 2,       // Show up to 2 units (e.g., "1 year, 2 months")
+  justNowThreshold: 60,  // Show "just now" for times within 60 seconds
+);
+
+final time = DateTime.now().subtract(Duration(hours: 25));
+print(timeSince(time, options)); // "1 day, 1 hour"
+```
+
+## API Reference
+
+### timeSince
+
+```dart
+String timeSince(dynamic time, [TimeFormatOptions? options])
+```
+
+Formats a time into a human-readable time-ago string.
+
+Parameters:
+- `time`: Either a Unix timestamp (int) or a DateTime object
+- `options`: Optional TimeFormatOptions to customize the output
+
+Returns a formatted string like "2 hours ago" or "3 months ago".
+
+### TimeFormatOptions
+
+```dart
+class TimeFormatOptions {
+  final bool addAgo;            // Whether to append "ago" to the result
+  final int maxPrecision;       // Maximum number of units to show
+  final int justNowThreshold;   // Seconds threshold for "just now"
+  
+  const TimeFormatOptions({
+    this.addAgo = true,
+    this.maxPrecision = 1,
+    this.justNowThreshold = 30,
+  });
+}
+```
+
+## Time Units
+
+The package supports the following time units:
+- Years
+- Months
+- Days
+- Hours
+- Minutes
+- Seconds
+
+Time units are automatically pluralized based on the value (e.g., "1 month" vs "2 months").
+
+## Error Handling
+
+The package throws an `ArgumentError` if the provided time input is invalid. Valid inputs are:
+- Unix timestamps (int)
+- DateTime objects
+
+## License
+
+MIT License - feel free to use this package in your projects.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+
+## Say Hello to Jeff 👋
+
+[personal site](https://www.jefferyabbott.com)\
+[LinkedIn](https://www.linkedin.com/in/jeffery-abbott-129b1a112)
